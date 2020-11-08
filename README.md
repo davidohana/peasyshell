@@ -42,7 +42,7 @@ Another example [here](sample_app.py).
 
 ### How to use 
 
-Copy [peasyshell.py](peasyshell.py) next to your Python shell script and use import it. 
+Copy [peasyshell.py](peasyshell.py) next to your Python shell script and import it. 
 
 ### License: 
 Apache-2.0
