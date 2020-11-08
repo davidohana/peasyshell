@@ -1,3 +1,9 @@
+"""
+Description : Python easy shell utilities
+Author      : david.ohana@ibm.com
+License     : Apache v2
+"""
+
 import atexit
 import logging
 import os

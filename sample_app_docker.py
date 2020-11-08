@@ -1,11 +1,3 @@
-# peasyshell
-
-Python easy shell utilities. Stop writing bash scripts and use Python instead.
-
-Compatible with Python 2.7 and Python 3.5+.  
-Tested and Mac and Ubuntu.
-
-```python
 from peasyshell import *
 
 # initialize logging to stdout in colors by severity level
@@ -30,12 +22,3 @@ container_id = sh("docker run -d --name {} {}".format(container_name, image_name
 sh("docker logs {} -f".format(container_id), timeout_sec=5)
 
 logger.info("done")
-```
-
-Output: 
-
-![](docs/sample_app_docker_output.png)
-
-### License: 
-Apache-2.0
-

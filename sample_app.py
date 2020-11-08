@@ -20,6 +20,10 @@ sh("echo **$my_var1**", shell=True)
 
 sh("echo **$my_var2**", shell=True, env={"my_var2": "bar"})
 
+out = sh("ps aux | grep sample_app | grep -v grep", shell=True, capture_out=True).stdout
+pid = out.split()[1]
+print("my process ID: " + pid)
+
 exit_on_fail = yes_or_no("exit on fail?")
 # next command will fail because -X arg does not exist
 # and as a result the python script will terminate
