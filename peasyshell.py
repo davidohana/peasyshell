@@ -175,7 +175,7 @@ def sh(cmd,
         In shell mode, treat multiple lines as a single command by adding backslash at
         the end of each line. when disabled, each line will be treated as separate shell command. Note that when
         not in shell mode, single-command is always enabled.
-    :param env: test
+    :param env:
         A mapping that defines the environment variables for the child process.
         Will use the script environment when not specified.
     :param log_process_id:
