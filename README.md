@@ -3,7 +3,9 @@
 Python easy shell utilities. Stop writing bash scripts and use Python instead.
 
 Compatible with Python 2.7 and Python 3.5+.  
-Tested and Mac and Ubuntu.
+Tested on Mac and Ubuntu.
+
+The story [behind it](https://davidoha.medium.com/avoiding-bash-frustration-use-python-for-shell-scripts-44bba8ba1e9e?source=friends_link&sk=a92de79cb005aa919eadaae811e3acbb).
 
 ```python
 from peasyshell import *
@@ -35,6 +37,12 @@ logger.info("done")
 Output: 
 
 ![](docs/sample_app_docker_output.png)
+
+Another example [here](sample_app.py).
+
+###How to use 
+
+Copy [peasyshell.py](peasyshell.py) next to your Python shell script and use import it. 
 
 ### License: 
 Apache-2.0
