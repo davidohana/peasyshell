@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 from peasyshell import *
 
 # initialize logging to stdout in colors by severity level

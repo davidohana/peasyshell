@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 from peasyshell import *
 
 init_logging()
