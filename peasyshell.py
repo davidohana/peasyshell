@@ -120,6 +120,11 @@ class ShellResult:
 
 child_process_ids = set()
 
+"""
+The exit code that the script will end with when timeout occurred and exit_on_timeout is enabled
+"""
+timeout_exitcode = 88
+
 
 def sh(cmd,
        echo_cmd=True,
@@ -130,7 +135,6 @@ def sh(cmd,
        capture_err=False,
        output_remove_trailing_newlines=True,
        timeout_sec=0,
-       timeout_exitcode=88,
        poll_wait_sec=0.1,
        shell=False,
        shell_single_command=True,
@@ -162,8 +166,6 @@ def sh(cmd,
     :param int timeout_sec:
         max time to wait until a command execution is complete (child process exits).
         0 means no timeout.
-    :param int timeout_exitcode:
-        The exit code that the script will end with when timeout occurred and exit_on_timeout is enabled.
     :param int poll_wait_sec:
         Time to wait between polls to check whether command execution already finished. Relevant only for calls
         with timeout enabled.
@@ -224,16 +226,17 @@ def sh(cmd,
         while True:
             if p.poll() is not None:
                 break
-            if 0 < timeout_sec <= time.time() - start_time:
+            if time.time() - start_time > timeout_sec:
                 logger.debug("shell call timeout ({} sec)".format(timeout_sec))
                 timed_out = True
                 os.kill(p.pid, signal.SIGHUP)
                 os.kill(p.pid, signal.SIGTERM)
+                p.returncode = timeout_exitcode
                 break
             time.sleep(poll_wait_sec)
 
     if log_process_id:
-        logger.debug("process ID {} terminated".format(p.pid))
+        logger.debug("process ID {} terminated with code {}".format(p.pid, p.returncode))
 
     # child process already terminated, no need to kill it at exit
     child_process_ids.remove(p.pid)
@@ -253,7 +256,7 @@ def sh(cmd,
 
     if exit_on_timeout and timed_out:
         logger.error("shell call timed-out - stopping execution")
-        exit(timeout_exitcode)
+        exit(p.returncode)
 
     if not timed_out and exit_on_fail and p.returncode != 0:
         logger.error("shell call failed with code {} - stopping execution".format(p.returncode))
