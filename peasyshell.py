@@ -250,6 +250,8 @@ def sh(cmd,
     # child process already terminated, no need to kill it at exit
     child_process_ids.remove(p.pid)
 
+    # on python3, process output need to be decoded
+    # on python2 its already a string.
     def try_decode(s):
         try:
             return s.decode()
