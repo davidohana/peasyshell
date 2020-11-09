@@ -15,8 +15,10 @@ if get_latest:
     # run a formatted command, output is send to stdout, terminate on cmd failure
     sh("docker image pull {image_name}", **cfg)
 
-# run a formatted command and capture standard output stream, do not terminate on error. Shell enabled to allow piping.
-res = sh("docker ps -a | grep {container_name}", shell=True, capture_out=True, exit_on_fail=False, **cfg)
+# run a formatted command and capture standard output stream,
+# do not terminate on error. Shell enabled to allow piping.
+res = sh("docker ps -a | grep {container_name}",
+         shell=True, capture_out=True, exit_on_fail=False, **cfg)
 # grep error code 0 means search string found
 if res.returncode == 0:
     # process the output conveniently, no need for awk/sed
