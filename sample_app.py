@@ -14,8 +14,8 @@ sh("""cat peasyshell.py
 hostname = sh("hostname -f", capture_out=True, output_remove_trailing_newlines=True).stdout
 print("my hostname is [{}]".format(hostname))
 
-hostname = sh("hostname -f", capture_out=True, output_remove_trailing_newlines=False).stdout
-print("my hostname is [{}]".format(hostname))
+sh("hostname -f", capture_out=True, output_remove_trailing_newlines=False)
+print("my hostname is [{}]".format(shres.stdout))
 
 os.environ["my_var1"] = "foo"
 sh("echo **$my_var1**", shell=True)

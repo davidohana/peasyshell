@@ -125,6 +125,8 @@ The exit code that the script will end with when timeout occurred and exit_on_ti
 """
 timeout_exitcode = 88
 
+shres = ShellResult()
+
 
 def sh(cmd,
        fmt_args=(),
@@ -225,8 +227,6 @@ def sh(cmd,
     # note: child will not be terminated if parent (this) process is killed
     child_process_ids.add(p.pid)
 
-    res = ShellResult()
-
     timed_out = False
     if timeout_sec == 0:
         p.wait()
@@ -250,18 +250,25 @@ def sh(cmd,
     # child process already terminated, no need to kill it at exit
     child_process_ids.remove(p.pid)
 
+    def try_decode(s):
+        try:
+            return s.decode()
+        except (UnicodeDecodeError, AttributeError):
+            return s
+
+    shres.returncode = p.returncode
+    shres.stdout = None
+    shres.stdout = None
     if p.stdout:
-        res.stdout = p.stdout.read().decode()
+        shres.stdout = try_decode(p.stdout.read())
     if p.stderr:
-        res.stderr = p.stderr.read().decode()
-    if p.returncode:
-        res.returncode = p.returncode
+        shres.stderr = try_decode(p.stderr.read())
 
     if output_remove_trailing_newlines:
-        if res.stdout:
-            res.stdout = res.stdout.rstrip(os.linesep)
-        if res.stderr:
-            res.stderr = res.stderr.rstrip(os.linesep)
+        if shres.stdout:
+            shres.stdout = shres.stdout.rstrip(os.linesep)
+        if shres.stderr:
+            shres.stderr = shres.stderr.rstrip(os.linesep)
 
     if exit_on_timeout and timed_out:
         logger.error("shell call timed-out - stopping execution")
@@ -271,7 +278,7 @@ def sh(cmd,
         logger.error("shell call failed with code {} - stopping execution".format(p.returncode))
         exit(p.returncode)
 
-    return res
+    return shres
 
 
 def input_compatible(prompt=None):
