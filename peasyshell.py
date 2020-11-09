@@ -127,6 +127,7 @@ timeout_exitcode = 88
 
 
 def sh(cmd,
+       fmt_args=(),
        echo_cmd=True,
        echo_cmd_args=False,
        exit_on_fail=True,
@@ -139,11 +140,14 @@ def sh(cmd,
        shell=False,
        shell_single_command=True,
        env=None,
-       log_process_id=True
+       log_process_id=True,
+       **fmt_kwargs
        ):
     """
     Executes a command in a child process.
 
+    :param fmt_args:
+        When list is not empty, cmd will be formatted using the args in this list.
     :param str cmd:
         The command to execute as a single string
     :param bool echo_cmd:
@@ -182,9 +186,14 @@ def sh(cmd,
         Will use the script environment when not specified.
     :param log_process_id:
         When enabled, ID of child process will be logged at debug level when created and terminated.
+    :param fmt_kwargs:
+        Dict of formatting args to format cmd with.
     :return:
         ShellResult instance with command exit code and captured output (if enabled)
     """
+
+    if len(fmt_args) > 0 or len(fmt_kwargs) > 0:
+        cmd = cmd.format(*fmt_args, **fmt_kwargs)
 
     cmd = cmd.strip()
     if shell and shell_single_command:
